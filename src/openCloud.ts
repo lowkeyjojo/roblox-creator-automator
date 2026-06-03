@@ -22,13 +22,47 @@ export class OpenCloudClient {
   }
 
   async createGamePass(universeId: string, item: CreatorItem): Promise<OpenCloudCreateResponse> {
-    return this.post(`/cloud/v2/universes/${encodeURIComponent(universeId)}/game-passes`, buildCreatePayload(item));
+    return this.postWithFallback(
+      [
+        `/cloud/v2/universes/${encodeURIComponent(universeId)}/game-passes`,
+        `/cloud/v2/universes/${encodeURIComponent(universeId)}/gamePasses`
+      ],
+      buildCreatePayload(item),
+      "game pass"
+    );
   }
 
   async createDeveloperProduct(universeId: string, item: CreatorItem): Promise<OpenCloudCreateResponse> {
-    return this.post(
-      `/cloud/v2/universes/${encodeURIComponent(universeId)}/developer-products`,
-      buildCreatePayload(item)
+    return this.postWithFallback(
+      [
+        `/cloud/v2/universes/${encodeURIComponent(universeId)}/developer-products`,
+        `/cloud/v2/universes/${encodeURIComponent(universeId)}/developerProducts`
+      ],
+      buildCreatePayload(item),
+      "developer product"
+    );
+  }
+
+  private async postWithFallback(
+    paths: string[],
+    body: unknown,
+    actionName: string
+  ): Promise<OpenCloudCreateResponse> {
+    const errors: string[] = [];
+
+    for (const path of paths) {
+      try {
+        return await this.post(path, body);
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        errors.push(`${path}: ${message}`);
+      }
+    }
+
+    throw new Error(
+      `Could not create ${actionName}. Tried ${paths.length} Open Cloud endpoint formats. ` +
+        "Check that your universeId is the Creator Dashboard experience ID, your API key has the right permissions, and Roblox supports this operation for your account.\n" +
+        errors.map((error) => `- ${error}`).join("\n")
     );
   }
 
@@ -111,6 +145,7 @@ function getErrorMessage(value: unknown): string | undefined {
   const record = value as Record<string, unknown>;
   if (typeof record.message === "string") return record.message;
   if (typeof record.error === "string") return record.error;
+  if (Array.isArray(record.errors)) return JSON.stringify(record.errors);
 
   return undefined;
 }
