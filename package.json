@@ -6,17 +6,24 @@
   "bin": {
     "rba": "dist/cli.js"
   },
+  "engines": {
+    "node": ">=22.0.0",
+    "npm": ">=10.0.0"
+  },
   "scripts": {
     "build": "tsc",
     "start": "node dist/cli.js",
     "check": "tsc --noEmit",
-    "test": "npm run build && node --test dist/**/*.test.js"
+    "test": "npm run build && node --test dist/**/*.test.js",
+    "validate:example": "npm run build && node dist/cli.js validate --config examples/creator.config.example.json --dry-run",
+    "export:example": "npm run build && node dist/cli.js validate --config examples/creator.config.example.json --out CreatorProducts.lua"
   },
   "keywords": [
     "roblox",
     "open-cloud",
     "cli",
-    "developer-tools"
+    "developer-tools",
+    "macos"
   ],
   "author": "lowkeyjojo",
   "license": "MIT",
