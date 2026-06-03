@@ -1,0 +1,31 @@
+{
+  "universeId": "123456789",
+  "gamePasses": [
+    {
+      "name": "VIP",
+      "description": "Unlocks VIP benefits in-game.",
+      "price": 99,
+      "icon": "./assets/vip.png"
+    },
+    {
+      "name": "Double Coins",
+      "description": "Earn twice as many coins while playing.",
+      "price": 149,
+      "icon": "./assets/double-coins.png"
+    }
+  ],
+  "developerProducts": [
+    {
+      "name": "100 Coins",
+      "description": "Grants 100 coins.",
+      "price": 25,
+      "icon": "./assets/coins-100.png"
+    },
+    {
+      "name": "Skip Timer",
+      "description": "Skips part of the current wait timer.",
+      "price": 9,
+      "icon": "./assets/skip-timer.png"
+    }
+  ]
+}
