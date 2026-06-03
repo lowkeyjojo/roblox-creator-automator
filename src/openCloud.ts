@@ -24,6 +24,7 @@ export class OpenCloudClient {
   async createGamePass(universeId: string, item: CreatorItem): Promise<OpenCloudCreateResponse> {
     return this.postWithFallback(
       [
+        `/cloud/v2/universes/${encodeURIComponent(universeId)}/legacy-game-passes`,
         `/cloud/v2/universes/${encodeURIComponent(universeId)}/game-passes`,
         `/cloud/v2/universes/${encodeURIComponent(universeId)}/gamePasses`
       ],
@@ -35,6 +36,7 @@ export class OpenCloudClient {
   async createDeveloperProduct(universeId: string, item: CreatorItem): Promise<OpenCloudCreateResponse> {
     return this.postWithFallback(
       [
+        `/cloud/v2/universes/${encodeURIComponent(universeId)}/legacy-developer-products`,
         `/cloud/v2/universes/${encodeURIComponent(universeId)}/developer-products`,
         `/cloud/v2/universes/${encodeURIComponent(universeId)}/developerProducts`
       ],
