@@ -17,11 +17,7 @@ export class OpenCloudClient {
   private readonly baseUrl: string;
 
   constructor(options: OpenCloudClientOptions) {
-    if (!options.apiKey.trim()) {
-      throw new Error("Open Cloud API key is required.");
-    }
-
-    this.apiKey = options.apiKey;
+    this.apiKey = normalizeCredential(options.apiKey);
     this.baseUrl = options.baseUrl ?? "https://apis.roblox.com";
   }
 
@@ -68,6 +64,29 @@ export function getCreatedId(response: OpenCloudCreateResponse): string | undefi
   }
 
   return undefined;
+}
+
+function normalizeCredential(value: string): string {
+  const trimmed = value.trim();
+
+  if (!trimmed) {
+    throw new Error("Open Cloud credential is required.");
+  }
+
+  const hasStraightQuotes =
+    (trimmed.startsWith("\"") && trimmed.endsWith("\"")) ||
+    (trimmed.startsWith("'") && trimmed.endsWith("'"));
+
+  const unwrapped = hasStraightQuotes ? trimmed.slice(1, -1).trim() : trimmed;
+  const invalid = [...unwrapped].find((char) => char.charCodeAt(0) > 255);
+
+  if (invalid) {
+    throw new Error(
+      "Open Cloud credential contains a smart quote or another invalid character. Re-copy it using plain straight quotes in Terminal."
+    );
+  }
+
+  return unwrapped;
 }
 
 function buildCreatePayload(item: CreatorItem): Record<string, unknown> {
