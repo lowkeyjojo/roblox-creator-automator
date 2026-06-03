@@ -1,0 +1,27 @@
+{
+  "name": "roblox-creator-automator",
+  "version": "0.1.0",
+  "description": "CLI tools for validating Roblox creator configs and generating Luau product modules.",
+  "type": "module",
+  "bin": {
+    "rba": "dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/cli.js",
+    "check": "tsc --noEmit",
+    "test": "npm run build && node --test dist/**/*.test.js"
+  },
+  "keywords": [
+    "roblox",
+    "open-cloud",
+    "cli",
+    "developer-tools"
+  ],
+  "author": "lowkeyjojo",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "typescript": "^5.7.2"
+  }
+}
